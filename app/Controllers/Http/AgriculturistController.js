@@ -1,5 +1,7 @@
 'use strict'
 
+const Agriculturist = use('App/Models/Agriculturist')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -18,18 +20,9 @@ class AgriculturistController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-  }
+      const agriculturists = Agriculturist.all()
 
-  /**
-   * Render a form to be used for creating a new agriculturist.
-   * GET agriculturists/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+      return agriculturists
   }
 
   /**
@@ -41,6 +34,24 @@ class AgriculturistController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    const data = request.only([
+      "name",
+      "cpf",
+      "ranch_name",
+      "ranch_city",
+      "ranch_state",
+      "ranch_total_area",
+      "ranch_total_arable_area",
+      "ranch_total_vegetation_area",
+      "ranch_crops_planted"
+    ])
+
+    if (data.ranch_total_arable_area + data.ranch_total_vegetation_area > data.ranch_total_area) {
+      response.status(400).send({ 'message': "The total area must be greater than the sum of the planted area and the vegetation area"})
+    }
+    const agriculturist = await Agriculturist.create({ ...agriculturistData})
+
+    return agriculturist
   }
 
   /**
@@ -53,18 +64,9 @@ class AgriculturistController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
-  }
+    const agriculturist = await Agriculturist.findOrFail(params.id)
 
-  /**
-   * Render a form to update an existing agriculturist.
-   * GET agriculturists/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+    return agriculturist
   }
 
   /**
@@ -76,6 +78,25 @@ class AgriculturistController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    const agriculturist = await Agriculturist.findOrFail(params.id)
+    const data = request.only([
+      "name",
+      "cpf",
+      "ranch_name",
+      "ranch_city",
+      "ranch_state",
+      "ranch_total_area",
+      "ranch_total_arable_area",
+      "ranch_total_vegetation_area",
+      "ranch_crops_planted"
+    ])
+
+    if (data.ranch_total_arable_area + data.ranch_total_vegetation_area > data.ranch_total_area) {
+      response.status(400).send({ 'message': "The total area must be greater than the sum of the planted area and the vegetation area"})
+    }
+    
+    agriculturist.merge(data)
+    return agriculturist
   }
 
   /**
@@ -87,6 +108,9 @@ class AgriculturistController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    const agriculturist = await Agriculturist.findOrFail(params.id)
+
+    await agriculturist.delete()
   }
 }
 
