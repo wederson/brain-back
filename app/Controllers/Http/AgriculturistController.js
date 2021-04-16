@@ -91,11 +91,13 @@ class AgriculturistController {
       "ranch_crops_planted"
     ])
 
-    if (data.ranch_total_arable_area + data.ranch_total_vegetation_area > data.ranch_total_area) {
+    if (parseInt(data.ranch_total_arable_area) + parseInt(data.ranch_total_vegetation_area) > parseInt(data.ranch_total_area)) {
       response.status(400).send({ 'message': "The total area must be greater than the sum of the planted area and the vegetation area"})
     }
     
     agriculturist.merge(data)
+
+    await agriculturist.save()
     return agriculturist
   }
 
