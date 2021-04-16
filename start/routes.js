@@ -20,5 +20,7 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
 
+Route.get('/popular', 'AgriculturistController.populate')
 
+Route.get('/totalporcidade', 'AgriculturistController.getTotalByCity')
 Route.resource('agriculturists', 'AgriculturistController')

@@ -1,28 +1,28 @@
-# Adonis API application
+# Introdução
 
-This is the boilerplate for creating an API server in AdonisJs, it comes pre-configured with.
+Para a camada de backend eu utilizei o Adonis para facilitar o desenvolvimento e ficar na mesma stack que a Brain utiliza.
 
-1. Bodyparser
-2. Authentication
-3. CORS
-4. Lucid ORM
-5. Migrations and seeds
+## Rotas
+
+O projeto possui algumas rotas principais:
+1. GET "/" - Retorna apenas um Hello world
+2. GET "/popular" - popula o DB com alguns agricultores
+3. GET "/totalporcidade" - retorna a quantidade de agricultores por cidade
+4. GET "/agriculturists" - lista os agricultores
+4. GET "/agriculturists/:id" - retorna um agricultores
+5. POST "/agriculturists" - adiciona um agricultor
+6. PUT "/agriculturists/:id" - edita um agricultor
+
+> Totas essas rotas estão no arquivo "Insomnia_Brain". Basta baixar o Insomnia e importar o arquivo json
 
 ## Setup
 
-Use the adonis command to install the blueprint
+Criar o arquivo .env com base no arquivo .env.example.
+Trocar os parâmetros de banco de dados para a sua configuração local
 
 ```bash
-adonis new yardstick --api-only
-```
-
-or manually clone the repo and then run `npm install`.
-
-
-### Migrations
-
-Run the following command to run startup migrations.
-
-```js
+npm install
 adonis migration:run
+adonis serve --dev
 ```
+
